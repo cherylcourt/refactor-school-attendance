@@ -10,7 +10,7 @@
             return (Math.random() >= 0.5);
         }
 
-        var nameColumns = $('tbody .name-col')
+        var nameColumns = $('tbody .name-col'),
             attendance = {};
 
         nameColumns.each(function() {
@@ -26,6 +26,64 @@
     }
 }());
 
+///////////////////// NEW
+
+$(function(){
+    var model = {
+        init: function() {
+            this.records = JSON.parse(localStorage.attendance);
+        },
+
+        getRecords: function() {
+            return this.records;
+        },
+
+        getRecord: function(name) {
+            return this.records[name];
+        },
+
+        updateRecord: function(name, column, attendance) {
+            this.records[name][column] = attendance;
+        }
+    };
+
+    var octopus = {
+        init: function() {
+            model.init();
+            view.init(model.getRecords());
+        }
+    };
+
+    var view = {
+        init: function(records) {
+            this.numberOfRecords = records.length;
+            this.numberOfColumns = records[Object.keys(records)[0]].length;
+
+            this._createHeaderRow();
+
+        },
+
+        render: function(records) {
+            //TODO: render state of attendance
+        },
+
+        _createHeaderRow: function() {
+            var headerRowHTML = [],
+                row, column;
+
+            headerRowHTML.push('<th class="name-col">Student Name</th>');
+            for(var i = 1; i <= this.numberOfColumns; i++) {
+                headerRowHTML.push('<th>'+i+'</th>')
+            }
+            headerRowHTML.push('<th class="missed-col">Days Missed</th>')
+            $("#header-row").append(headerRowHTML.concat(''));
+        }
+    };
+
+    octopus.init();
+});
+
+///////////////////// ORIGINAL
 
 /* STUDENT APPLICATION */
 $(function() {
