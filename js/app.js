@@ -56,27 +56,56 @@ $(function(){
 
     var view = {
         init: function(records) {
-            this.numberOfRecords = records.length;
             this.numberOfColumns = records[Object.keys(records)[0]].length;
 
             this._createHeaderRow();
+            this._createAllStudentRowsHTML(records);
 
+            //TODO: create event handlers for each checkbox
+            //TODO: notify octopus when a checkbox is clicked
         },
 
-        render: function(records) {
+        render: function(name, attendance) {
             //TODO: render state of attendance
         },
 
         _createHeaderRow: function() {
             var headerRowHTML = [],
-                row, column;
+                column;
 
             headerRowHTML.push('<th class="name-col">Student Name</th>');
-            for(var i = 1; i <= this.numberOfColumns; i++) {
-                headerRowHTML.push('<th>'+i+'</th>')
+            for(column = 1; column <= this.numberOfColumns; column++) {
+                headerRowHTML.push('<th>'+ column +'</th>');
             }
             headerRowHTML.push('<th class="missed-col">Days Missed</th>')
-            $("#header-row").append(headerRowHTML.concat(''));
+            $("#header-row").append(headerRowHTML.join());
+        },
+
+        _createAllStudentRowsHTML: function(records) {
+            var html = [];
+            for(var key in records) {
+                html.push(this._createStudentRowHTML(key, records[key]));
+            }
+            $("#table-body").append(html.join());
+        },
+
+        _createStudentRowHTML: function(name, record) {
+            var html = [],
+                absences = 0;
+            html.push('<tr class="student">');
+            html.push('<td class="name-col">' + name + '</td>');
+            for(var column = 0; column < this.numberOfColumns; column++) {
+                var checkedText = ' checked';
+                if(!record[column]) {
+                    absences++;
+                    checkedText = '';
+                }
+                html.push('<td class="attend-col"><input type="checkbox"'+ checkedText +'></td>');
+
+            }
+            html.push('<td class="missed-col">'+ absences +'</td>');
+            html.push('</tr>');
+            return html.join();
         }
     };
 
