@@ -92,7 +92,7 @@ $(function(){
         _createStudentRowHTML: function(name, record) {
             var html = [],
                 absences = 0;
-            html.push('<tr class="student">');
+            html.push('<tr id="'+ name +'" class="student">');
             html.push('<td class="name-col">' + name + '</td>');
             for(var column = 0; column < this.numberOfColumns; column++) {
                 var checkedText = ' checked';
